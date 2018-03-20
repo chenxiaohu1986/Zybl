@@ -166,8 +166,8 @@ public class MatchAdapter extends BaseAdapter {
 	private String getZyblContent(List<ItemZybl> itemContents) {
 		String content = "";
 		if (itemContents != null && itemContents.size() > 0) {
-			for (ItemZybl itemZybl : itemContents) {
-				content += itemZybl.getContent();
+			for (int j=0 ; j < itemContents.size() ; j++) {
+				content += (j + 1) + "."+ itemContents.get(j).getContent();
 			}
 		}
 		return content;

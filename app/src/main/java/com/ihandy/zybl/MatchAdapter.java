@@ -91,20 +91,20 @@ public class MatchAdapter extends BaseAdapter {
 
 
 		try {
-			if (position == 4){
-				String me = "" ;
-				Log.e("zybl","position " + me);
+			if (position == 4) {
+				String me = "";
+				Log.e("zybl", "position " + me);
 			}
 			ItemMatch itemMatch = list.get(position);
-			if (itemMatch.getKeywords() == null){
-					holder.tvHead.setText(itemMatch.getNum());
-				} else {
-					holder.tvHead.setText(itemMatch.getNum() + "    " + itemMatch.getKeywords().split(",")[2]);
-				}
+			if (itemMatch.getKeywords() == null) {
+				holder.tvHead.setText(itemMatch.getNum());
+			} else {
+				holder.tvHead.setText(itemMatch.getNum() + "    " + itemMatch.getKeywords().split(",")[2]);
+			}
 
 			Odds[] odds = itemMatch.getOdds();
-			if (odds != null){
-				for (Odds odd : odds){
+			if (odds != null) {
+				for (Odds odd : odds) {
 					String home = df.format(Float.valueOf(odd.getHome()));
 					String draw = df.format(Float.valueOf(odd.getDraw()));
 					String away = df.format(Float.valueOf(odd.getAway()));
@@ -112,7 +112,7 @@ public class MatchAdapter extends BaseAdapter {
 						holder.homeOdds.setText(home);
 						holder.drawOdds.setText(draw);
 						holder.awayOdds.setText(away);
-					} else if ("JC_ZQ_RQSPF_GG".equals(odd.getPlayType())){
+					} else if ("JC_ZQ_RQSPF_GG".equals(odd.getPlayType())) {
 						holder.lethomeOdds.setText(home);
 						holder.letdrawOdds.setText(draw);
 						holder.letawayOdds.setText(away);
@@ -125,22 +125,22 @@ public class MatchAdapter extends BaseAdapter {
 
 			try {
 				final List<ItemZybl> zyblList = itemMatch.getList();
-				ZyblAdapter zyblAdapter = new ZyblAdapter(context,itemMatch);
+				ZyblAdapter zyblAdapter = new ZyblAdapter(context, itemMatch);
 				holder.lvZybl.setAdapter(zyblAdapter);
 
 				holder.copyBtn.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						String content = getZyblContent(zyblList);
-						copy(content,context);
-						Toast.makeText(context,"复制成功...",Toast.LENGTH_SHORT).show();
+						copy(content, context);
+						Toast.makeText(context, "复制成功...", Toast.LENGTH_SHORT).show();
 					}
 				});
-			}catch (Exception e){
+			} catch (Exception e) {
 
 			}
-		}catch (Exception e){
-			Log.e("zybl",e.getMessage());
+		} catch (Exception e) {
+			Log.e("zybl", e.getMessage());
 		}
 		return convertView;
 	}
@@ -165,19 +165,18 @@ public class MatchAdapter extends BaseAdapter {
 
 	private String getZyblContent(List<ItemZybl> itemContents) {
 		String content = "";
-		if (itemContents != null && itemContents.size()>0){
-			for (ItemZybl itemZybl : itemContents){
-				content +=  itemZybl.getContent();
+		if (itemContents != null && itemContents.size() > 0) {
+			for (ItemZybl itemZybl : itemContents) {
+				content += itemZybl.getContent();
 			}
 		}
 		return content;
 	}
 
-	public static void copy(String content, Context context)
-	{
+	public static void copy(String content, Context context) {
 		// 得到剪贴板管理器
-		ClipboardManager cmb = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
-		ClipData clip = ClipData.newPlainText("",content);
+		ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+		ClipData clip = ClipData.newPlainText("", content);
 		cmb.setPrimaryClip(clip);
 	}
 

@@ -31,7 +31,6 @@ android {
     }
 
     productFlavors {
-
         pro {
             minSdkVersion 16
             targetSdkVersion 26

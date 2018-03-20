@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/colorLightGray">
+
+        <TextView
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_head"/>
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:id="@+id/tv_middle"
+            android:layout_width="@dimen/zybl_width"
+            android:layout_height="@dimen/zybl_height"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:id="@+id/home"
+            android:layout_toLeftOf="@id/tv_middle"
+            android:layout_width="@dimen/zybl_width"
+            android:layout_height="@dimen/zybl_height"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/away"
+            android:layout_toRightOf="@id/tv_middle"
+            android:layout_width="@dimen/zybl_width"
+            android:layout_height="@dimen/zybl_height"
+            android:gravity="center"
+           />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:id="@+id/drawOdds"
+            android:layout_width="@dimen/zybl_width"
+            android:layout_height="@dimen/zybl_height"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:background="@drawable/corners_bg"
+            />
+
+        <TextView
+            android:id="@+id/homeOdds"
+            android:layout_toLeftOf="@+id/drawOdds"
+            android:layout_width="@dimen/zybl_width"
+            android:layout_height="@dimen/zybl_height"
+            android:gravity="center"
+            android:background="@drawable/corners_bg"
+            />
+
+        <ImageView
+            android:id="@+id/copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/clipboard_copy"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/homeOdds"/>
+
+        <TextView
+            android:id="@+id/awayOdds"
+            android:layout_toRightOf="@+id/drawOdds"
+            android:layout_width="@dimen/zybl_width"
+            android:layout_height="@dimen/zybl_height"
+            android:gravity="center"
+            android:background="@drawable/corners_bg"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:id="@+id/letdrawOdds"
+            android:layout_width="@dimen/zybl_width"
+            android:layout_height="@dimen/zybl_height"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:background="@drawable/corners_bg"
+            />
+
+        <TextView
+            android:id="@+id/lethomeOdds"
+            android:layout_toLeftOf="@+id/letdrawOdds"
+            android:layout_width="@dimen/zybl_width"
+            android:layout_height="@dimen/zybl_height"
+            android:gravity="center"
+            android:background="@drawable/corners_bg"
+            />
+
+        <TextView
+            android:id="@+id/rqspf"
+            android:layout_marginRight="15dp"
+            android:layout_width="@dimen/zybl_height"
+            android:layout_height="@dimen/zybl_height"
+            android:gravity="center"
+            android:text="让球"
+            android:layout_toLeftOf="@id/lethomeOdds"/>
+
+        <TextView
+            android:id="@+id/letawayOdds"
+            android:layout_toRightOf="@+id/letdrawOdds"
+            android:layout_width="@dimen/zybl_width"
+            android:layout_height="@dimen/zybl_height"
+            android:gravity="center"
+            android:background="@drawable/corners_bg"
+            />
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+    <com.ihandy.zybl.ListViewForScrollView
+        android:id="@+id/lv_zybl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@null">
+
+    </com.ihandy.zybl.ListViewForScrollView>
+
+</LinearLayout>

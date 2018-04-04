@@ -23,7 +23,7 @@ public class ItemMatch {
 
 
 	private List<ItemZybl> list = new ArrayList<>();
-	private Odds[] odds;
+//	private Odds[] odds;
 
 
 	public String getKeywords() {
@@ -114,11 +114,11 @@ public class ItemMatch {
 		this.list = list;
 	}
 
-	public Odds[] getOdds() {
-		return odds;
-	}
-
-	public void setOdds(Odds[] odds) {
-		this.odds = odds;
-	}
+//	public Odds[] getOdds() {
+//		return odds;
+//	}
+//
+//	public void setOdds(Odds[] odds) {
+//		this.odds = odds;
+//	}
 }

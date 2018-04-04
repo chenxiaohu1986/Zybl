@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
 //	http://cms.8win.com/zybl?label=history&tipsLabel=&matchDate=2018-03-19
 	String zyblUrl = "http://cms.8win.com/zybl?label=history&tipsLabel=&matchDate=";
 
-	private String matchDate = TimeUtils.getNowString(DEFAULT_DATE_FORMAT);   //比赛日期  默认是当天
+	public static String matchDate = TimeUtils.getNowString(new SimpleDateFormat("yyyy-MM-dd"));   //比赛日期  默认是当天
 
 	private int year;
 	private int month;
@@ -136,25 +136,25 @@ public class MainActivity extends Activity {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 				Element newMatchList = doc.getElementById("newMatchList");
 				Elements matchItem = newMatchList.child(0).children();
+				String matchWeek = getMatchWeek();
 				for (int i = 1 ; i < matchItem.size() ; i++) {
 					Element item = matchItem.get(i);
 					ItemMatch itemMatch = new ItemMatch();
-
-
 					String num = "";
+					if ( "a".equals(item.tagName())) {    //a href
+						String home = item.child(0).child(1).text();
+						String away = item.child(0).child(3).text();
+						itemMatch.setHome(home);
+						itemMatch.setAway(away);
 
-					if ( "a".equals(item.tagName())) {
 						num = item.child(0).child(0).text();
 						String zyblUrl = baseUrl + item.attr("href");
 						itemMatch.setZyblUrl(zyblUrl);
-						String matchId = getMatchId(num);
+						String matchId = matchWeek + num;
 						itemMatch.setMatchId(matchId);
 						itemMatch.setOddUrl(baseOddUrl + matchId);
-
-						itemMatch = loadMatchData(itemMatch);
 
 					} else {
 						String home = item.child(1).text();
@@ -162,8 +162,9 @@ public class MainActivity extends Activity {
 						itemMatch.setHome(home);
 						itemMatch.setAway(away);
 						num = item.child(0).text();
-						String matchId = getMatchId(num);
+						String matchId = matchWeek + num;
 						itemMatch.setMatchId(matchId);
+						itemMatch.setOddUrl(baseOddUrl + matchId);
 					}
 					itemMatch.setNum(num);
 					list.add(itemMatch);
@@ -171,7 +172,7 @@ public class MainActivity extends Activity {
 
 
 			}catch (Exception e){
-
+				Log.e("zybl",e.getMessage());
 			}
 
 			// 执行完毕后给handler发送一个空消息
@@ -180,68 +181,6 @@ public class MainActivity extends Activity {
 		}
 	};
 
-	Gson gson = new Gson();
-
-	private ItemMatch loadMatchData(ItemMatch itemMatch) {
-		//爆料内容
-		Connection conn = Jsoup.connect(itemMatch.getZyblUrl());
-		conn.header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:32.0) Gecko/    20100101 Firefox/32.0");
-		Document doc = null;
-		try {
-			doc = conn.get();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-
-		String keywords = doc.select("meta[name=keywords]").first()
-				.attr("content");
-		String ctime = doc.getElementById("ctime").text();
-		String home = doc.getElementById("home").text();
-		String away = doc.getElementById("away").text();
-
-
-		String homeIcon = doc.getElementById("homeIcon").attr("src");
-		String awayIcon = doc.getElementById("awayIcon").attr("src");
-
-		Element zyblContent = doc.getElementById("zyblContent");   //章鱼爆料内容
-		List list = new ArrayList();
-		Elements zyblElements = zyblContent.children();
-		for (int i=0 ; i < zyblElements.size()-1 ; i++) {   //最后一行是js脚本
-			Element item = zyblElements.get(i);
-			String title = item.child(0).text();
-			String zhuke = item.child(1).child(0).text();
-			String des = item.child(1).text();
-			String content = item.child(2).text();
-
-
-			ItemZybl itemZybl = new ItemZybl();
-			itemZybl.setTitle(title);
-			itemZybl.setZhuke(zhuke);
-			itemZybl.setDes(des);
-			itemZybl.setContent(content);
-			list.add(itemZybl);
-		}
-
-		itemMatch.setKeywords(keywords);
-		itemMatch.setCtime(ctime);
-		itemMatch.setHome(home);
-		itemMatch.setAway(away);
-		itemMatch.setHomeIcon(homeIcon);
-		itemMatch.setAwayIcon(awayIcon);
-		itemMatch.setList(list);
-
-		//赔率
-		String oddUrl = itemMatch.getOddUrl();
-		try{
-			String jsonData = post(oddUrl);
-			Odds[] odds = gson.fromJson(jsonData, Odds[].class);
-			itemMatch.setOdds(odds);
-		}catch (Exception e){
-			Log.e("zybl",e.getMessage());
-		}
-		return itemMatch;
-	}
 
 	Handler handler = new Handler() {
 		@Override
@@ -260,6 +199,7 @@ public class MainActivity extends Activity {
 		if(list.isEmpty()) {
 			Toast.makeText(this,"暂无数据...",Toast.LENGTH_LONG).show();
 		} else {
+			//list.clear();
 			matchAdapter = new MatchAdapter(this,list);
 			listView.setAdapter(matchAdapter);
 		}
@@ -269,9 +209,9 @@ public class MainActivity extends Activity {
 
 	private void loadData(){
 		if (NetworkUtils.isConnected()){
+			list.clear();
 			// 显示“正在加载”窗口
 			swipeRefreshLayout.setRefreshing(true);
-			list.clear();
 			if (matchAdapter != null){
 				matchAdapter.notifyDataSetChanged();
 			}
@@ -296,24 +236,14 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	//	2018-03-18
-	private String post(String oddUrl) throws IOException {
-		OkHttpClient client = new OkHttpClient();
-//		String oddUrl = "https://www.8win.com/jsbf/zq/odd";
-//		RequestBody body = new FormBody.Builder()
-//				.add("matchTime",matchTime)
-//				.add("lotteryCode","JC_ZQ")
-//				.add("flag","1")
-//				.build();
-		Request request = new Request.Builder()
-				.url(oddUrl)
-//				.post(body)
-				.build();
-		try (Response response = client.newCall(request).execute()) {
-			return response.body().string();
-		}
-	}
 
+
+
+	private String getMatchWeek(){
+		Date match = TimeUtils.string2Date(matchDate,DEFAULT_DATE_FORMAT);
+		String date = TimeUtils.date2String(match,DATE_FORMAT_DATE);
+		return date + getWeek(match);
+	}
 
 	private String getMatchId(String num){
 		Date match = TimeUtils.string2Date(matchDate,DEFAULT_DATE_FORMAT);

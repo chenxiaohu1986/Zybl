@@ -55,8 +55,6 @@ public class ZyblAdapter extends BaseAdapter {
 		String zhuke = itemZybl.getZhuke().trim();
 		if (convertView == null) {
 			holder = new ViewHolder();
-
-
 			if ("主".equals(zhuke)){
 				convertView = mInflater.inflate(R.layout.item_zybl_home, null);
 			}else if ("客".equals(zhuke)){

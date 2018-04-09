@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +48,7 @@ import okhttp3.Response;
  * Created by cxh on 18/3/15.
  */
 
-public class MatchAdapter extends BaseAdapter {
+public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder> {
 
 	public static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	public static final SimpleDateFormat DATE_FORMAT_DATE    = new SimpleDateFormat("yyyyMMdd");
@@ -55,88 +58,91 @@ public class MatchAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private List<ItemMatch> list;
 
+
+
 	public MatchAdapter(Context context, List<ItemMatch> list) {
 		this.context = context;
 		this.mInflater = LayoutInflater.from(context);
 		this.list = list;
 	}
 
+
+
+	@NonNull
 	@Override
-	public int getCount() {
+	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+		MyViewHolder holder = new MyViewHolder(mInflater.inflate(R.layout.item_match, parent, false));
+		return holder;
+	}
+
+	@Override
+	public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+		ItemMatch itemMatch = list.get(position);
+		if (itemMatch.getKeywords() == null) {
+			holder.tvHead.setText(itemMatch.getNum());
+		} else {
+			holder.tvHead.setText(itemMatch.getNum() + "    " + itemMatch.getKeywords().split(",")[2]);
+		}
+		holder.home.setText(itemMatch.getHome());
+		holder.away.setText(itemMatch.getAway());
+
+		setOdd(itemMatch.getOddUrl(),holder);
+
+		setZybl(itemMatch,holder);
+
+
+	}
+
+	@Override
+	public int getItemCount() {
 		return list.size();
 	}
 
-	@Override
-	public Object getItem(int i) {
-		return 0;
-	}
+	public class MyViewHolder extends RecyclerView.ViewHolder {
 
-	@Override
-	public long getItemId(int i) {
-		return 0;
-	}
+		public TextView tvHead;
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder = null;
-		if (convertView == null) {
-			holder = new ViewHolder();
-			convertView = mInflater.inflate(R.layout.item_match, null);
+		public TextView home;
+		public TextView away;
+		public ImageView copyBtn;
+
+		public TextView homeOdds;
+		public TextView drawOdds;
+		public TextView awayOdds;
+		public TextView lethomeOdds;
+		public TextView letdrawOdds;
+		public TextView letawayOdds;
+		public RecyclerView lvZybl;
+
+		public MyViewHolder(View view) {
+			super(view);
+			tvHead = (TextView) view.findViewById(R.id.tv_head);
+
+			home = (TextView) view.findViewById(R.id.home);
+			away = (TextView) view.findViewById(R.id.away);
+			copyBtn = (ImageView) view.findViewById(R.id.copy);
 
 
-			holder.tvHead = (TextView) convertView.findViewById(R.id.tv_head);
-
-			holder.home = (TextView) convertView.findViewById(R.id.home);
-			holder.away = (TextView) convertView.findViewById(R.id.away);
-			holder.copyBtn = (ImageView) convertView.findViewById(R.id.copy);
-
-
-			holder.homeOdds = (TextView) convertView.findViewById(R.id.homeOdds);
-			holder.drawOdds = (TextView) convertView.findViewById(R.id.drawOdds);
-			holder.awayOdds = (TextView) convertView.findViewById(R.id.awayOdds);
-			holder.lethomeOdds = (TextView) convertView.findViewById(R.id.lethomeOdds);
-			holder.letdrawOdds = (TextView) convertView.findViewById(R.id.letdrawOdds);
-			holder.letawayOdds = (TextView) convertView.findViewById(R.id.letawayOdds);
-			holder.lvZybl = (ListViewForScrollView) convertView.findViewById(R.id.lv_zybl);
-			convertView.setTag(holder);
-
-		} else {
-
-			holder = (ViewHolder) convertView.getTag();
+			homeOdds = (TextView) view.findViewById(R.id.homeOdds);
+			drawOdds = (TextView) view.findViewById(R.id.drawOdds);
+			awayOdds = (TextView) view.findViewById(R.id.awayOdds);
+			lethomeOdds = (TextView) view.findViewById(R.id.lethomeOdds);
+			letdrawOdds = (TextView) view.findViewById(R.id.letdrawOdds);
+			letawayOdds = (TextView) view.findViewById(R.id.letawayOdds);
+			lvZybl = (RecyclerView) view.findViewById(R.id.lv_zybl);
+			RecyclerView.LayoutManager manager = new LinearLayoutManager(itemView.getContext());
+			manager.setAutoMeasureEnabled(true);
+			lvZybl.setLayoutManager(manager);
 		}
-
-
-		try {
-			if (position == 4) {
-				String me = "";
-				Log.e("zybl", "position " + me);
-			}
-			ItemMatch itemMatch = list.get(position);
-			if (itemMatch.getKeywords() == null) {
-				holder.tvHead.setText(itemMatch.getNum());
-			} else {
-				holder.tvHead.setText(itemMatch.getNum() + "    " + itemMatch.getKeywords().split(",")[2]);
-			}
-
-
-			holder.home.setText(itemMatch.getHome());
-			holder.away.setText(itemMatch.getAway());
-
-			setOdd(itemMatch.getOddUrl(),holder);
-
-			setZybl(itemMatch,holder);
-
-
-		} catch (Exception e) {
-			Log.e("zybl", e.getMessage());
-		}
-		return convertView;
 	}
+
+
+
 
 	Gson gson = new Gson();
 	OkHttpClient client = new OkHttpClient();
-
-	private void setZybl(final ItemMatch itemMatch,final ViewHolder holder) {
+//
+	private void setZybl(final ItemMatch itemMatch,final MyViewHolder holder) {
 		final String zyblUrl = itemMatch.getZyblUrl();
 		if (StringUtils.isEmpty(zyblUrl)){
 			return;
@@ -229,8 +235,8 @@ public class MatchAdapter extends BaseAdapter {
 		}
 		return mWay;
 	}
-
-	private void setOdd(String oddUrl,final ViewHolder holder){
+//
+	private void setOdd(String oddUrl,final MyViewHolder holder){
 //		String oddUrl = "https://www.8win.com/jsbf/zq/odd";
 //		RequestBody body = new FormBody.Builder()
 //				.add("matchTime",matchTime)
@@ -279,24 +285,6 @@ public class MatchAdapter extends BaseAdapter {
 				}
 			}
 		});
-	}
-
-	public final class ViewHolder {
-		public TextView tvHead;
-
-		public TextView home;
-		public TextView away;
-		public ImageView copyBtn;
-
-		public TextView homeOdds;
-		public TextView drawOdds;
-		public TextView awayOdds;
-		public TextView lethomeOdds;
-		public TextView letdrawOdds;
-		public TextView letawayOdds;
-
-
-		public ListViewForScrollView lvZybl;
 	}
 
 	private String getZyblContent(List<ItemZybl> itemContents) {

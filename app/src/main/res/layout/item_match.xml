@@ -150,13 +150,14 @@
 
 
 
-
-    <com.ihandy.zybl.ListViewForScrollView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/lv_zybl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:divider="@null">
+    </android.support.v7.widget.RecyclerView>
 
-    </com.ihandy.zybl.ListViewForScrollView>
 
 </LinearLayout>

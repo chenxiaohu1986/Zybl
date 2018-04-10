@@ -22,6 +22,7 @@ import java.util.List;
 
 public class ZyblAdapter extends RecyclerView.Adapter<ZyblAdapter.MyViewHolder> {
 
+	private final int EMPTY_VIEW = 0;
 	private final int ZHU_VIEW = 1;
 	private final int KE_VIEW = 2;
 
@@ -42,7 +43,9 @@ public class ZyblAdapter extends RecyclerView.Adapter<ZyblAdapter.MyViewHolder> 
 	@Override
 	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View view = null;
-		if (ZHU_VIEW == viewType){
+		if (EMPTY_VIEW == viewType){
+			view = mInflater.inflate(R.layout.item_empty, parent, false);
+		} else if (ZHU_VIEW == viewType){
 			view = mInflater.inflate(R.layout.item_zybl_home, parent, false);
 		} else if (KE_VIEW == viewType){
 			view = mInflater.inflate(R.layout.item_zybl_away, parent, false);
@@ -55,26 +58,36 @@ public class ZyblAdapter extends RecyclerView.Adapter<ZyblAdapter.MyViewHolder> 
 	public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 		ItemZybl itemZybl = list.get(position);
 		String zhuke = itemZybl.getZhuke().trim();
-		holder.des.setText(itemZybl.getDes());
-		holder.title.setText(itemZybl.getTitle());
+		//Log.i("zybl", itemZybl.getDes() +  "------" +zhuke);
+		if ("".equals(zhuke)){
+			holder.tvEmpty.setText("暂无消息");
+		}else {
+			holder.des.setText(itemZybl.getDes());
+			holder.title.setText(itemZybl.getTitle());
 
-		holder.content.setText(itemZybl.getContent());
-		try {
-			if ("主".equals(zhuke)) {
-				Glide.with(context).load(itemMatch.getHomeIcon()).into(holder.teamIcon);
-			} else if ("客".equals(zhuke)) {
-				Glide.with(context).load(itemMatch.getAwayIcon()).into(holder.teamIcon);
+			holder.content.setText(itemZybl.getContent());
+			try {
+				if ("主".equals(zhuke)) {
+					Glide.with(context).load(itemMatch.getHomeIcon()).into(holder.teamIcon);
+				} else if ("客".equals(zhuke)) {
+					Glide.with(context).load(itemMatch.getAwayIcon()).into(holder.teamIcon);
+				}
+			}catch (Exception e){
+				Log.e("zybl",e.getMessage());
 			}
-		}catch (Exception e){
-			Log.e("zybl",e.getMessage());
 		}
 	}
 
 	@Override
 	public int getItemViewType(int position) {
-		if ("主".equals(list.get(position).getZhuke())) {
+		ItemZybl itemZybl = list.get(position);
+		String zhuke = itemZybl.getZhuke();
+		if ("".equals(zhuke)){
+			return EMPTY_VIEW;
+		}
+		else if ("主".equals(zhuke)) {
 			return ZHU_VIEW;
-		}else if ("客".equals(list.get(position).getZhuke())){
+		}else if ("客".equals(zhuke)){
 			return KE_VIEW;
 		}
 		return super.getItemViewType(position);
@@ -139,6 +152,7 @@ public class ZyblAdapter extends RecyclerView.Adapter<ZyblAdapter.MyViewHolder> 
 
 	public class MyViewHolder extends RecyclerView.ViewHolder {
 
+		public TextView tvEmpty;
 		public ImageView teamIcon;
 		public TextView des;
 		public TextView title;
@@ -146,10 +160,19 @@ public class ZyblAdapter extends RecyclerView.Adapter<ZyblAdapter.MyViewHolder> 
 
 		public MyViewHolder(View view) {
 			super(view);
+			tvEmpty = (TextView) view.findViewById(R.id.tv_empty);
 			teamIcon = (ImageView) view.findViewById(R.id.teamIcon);
 			des = (TextView) view.findViewById(R.id.des);
 			title = (TextView) view.findViewById(R.id.title);
 			content = (TextView) view.findViewById(R.id.content);
+		}
+	}
+
+
+	public class EmptyViewHolder extends RecyclerView.ViewHolder{
+		public EmptyViewHolder(View view) {
+			super(view);
+
 		}
 	}
 

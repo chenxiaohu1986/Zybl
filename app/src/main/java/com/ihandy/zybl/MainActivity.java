@@ -146,34 +146,27 @@ public class MainActivity extends Activity {
 					Element item = matchItem.get(i);
 					ItemMatch itemMatch = new ItemMatch();
 					String num = "";
+					String home = "";
+					String away = "";
 					if ( "a".equals(item.tagName())) {    //a href
-						String home = item.child(0).child(1).text();
-						String away = item.child(0).child(3).text();
-						itemMatch.setHome(home);
-						itemMatch.setAway(away);
-
+						home = item.child(0).child(1).text();
+						away = item.child(0).child(3).text();
 						num = item.child(0).child(0).text();
-						String zyblUrl = baseUrl + item.attr("href");
-						itemMatch.setZyblUrl(zyblUrl);
-						String matchId = matchWeek + num;
-						itemMatch.setMatchId(matchId);
-						itemMatch.setOddUrl(baseOddUrl + matchId);
-
 					} else {
-						String home = item.child(1).text();
-						String away = item.child(3).text();
-						itemMatch.setHome(home);
-						itemMatch.setAway(away);
+						home = item.child(1).text();
+						away = item.child(3).text();
 						num = item.child(0).text();
-						String matchId = matchWeek + num;
-						itemMatch.setMatchId(matchId);
-						itemMatch.setOddUrl(baseOddUrl + matchId);
 					}
+					itemMatch.setHome(home);
+					itemMatch.setAway(away);
 					itemMatch.setNum(num);
+					String matchId = matchWeek + num;
+					itemMatch.setMatchId(matchId);
+					itemMatch.setOddUrl(baseOddUrl + matchId);
+					String zyblUrl = baseUrl + "/zybl/" + matchId;
+					itemMatch.setZyblUrl(zyblUrl);
 					list.add(itemMatch);
 				}
-
-
 			}catch (Exception e){
 				Log.e("zybl",e.getMessage());
 			}

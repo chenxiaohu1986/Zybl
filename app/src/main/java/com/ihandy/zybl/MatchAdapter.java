@@ -71,7 +71,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 	@NonNull
 	@Override
 	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		MyViewHolder holder = new MyViewHolder(mInflater.inflate(R.layout.item_match, parent, false));
+		MyViewHolder holder = new MyViewHolder(mInflater.inflate(R.layout.item_match,parent, false));
 		return holder;
 	}
 
@@ -141,12 +141,9 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 
 	Gson gson = new Gson();
 	OkHttpClient client = new OkHttpClient();
-//
+
 	private void setZybl(final ItemMatch itemMatch,final MyViewHolder holder) {
 		final String zyblUrl = itemMatch.getZyblUrl();
-		if (StringUtils.isEmpty(zyblUrl)){
-			return;
-		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -168,42 +165,52 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 				Element zyblContent = doc.getElementById("zyblContent");   //章鱼爆料内容
 				final List list = new ArrayList();
 				Elements zyblElements = zyblContent.children();
-				for (int i=0 ; i < zyblElements.size()-1 ; i++) {   //最后一行是js脚本
-					Element item = zyblElements.get(i);
-					String title = item.child(0).text();
-					String zhuke = item.child(1).child(0).text();
-					String des = item.child(1).text();
-					String content = item.child(2).text();
-					ItemZybl itemZybl = new ItemZybl();
-					itemZybl.setTitle(title);
-					itemZybl.setZhuke(zhuke);
-					itemZybl.setDes(des);
-					itemZybl.setContent(content);
-					list.add(itemZybl);
-				}
 
+				//Log.i("zybl",zyblUrl+"------"+zyblElements.size());
+				if (zyblElements.size() ==1){
+					ItemZybl itemZybl = new ItemZybl();
+					itemZybl.setZhuke("");
+					list.add(itemZybl);
+				} else {
+					for (int i=0 ; i < zyblElements.size()-1 ; i++) {   //最后一行是js脚本
+						Element item = zyblElements.get(i);
+						String title = item.child(0).text();
+						String zhuke = item.child(1).child(0).text();
+						String des = item.child(1).text();
+						String content = item.child(2).text();
+						ItemZybl itemZybl = new ItemZybl();
+						itemZybl.setTitle(title);
+						itemZybl.setZhuke(zhuke);
+						itemZybl.setDes(des);
+						itemZybl.setContent(content);
+						list.add(itemZybl);
+					}
+				}
 				itemMatch.setKeywords(keywords);
 				itemMatch.setCtime(ctime);
 				itemMatch.setHomeIcon(homeIcon);
 				itemMatch.setAwayIcon(awayIcon);
 				itemMatch.setList(list);
 
-				((Activity) context).runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						ZyblAdapter zyblAdapter = new ZyblAdapter(context, itemMatch);
-						holder.lvZybl.setAdapter(zyblAdapter);
 
-						holder.copyBtn.setOnClickListener(new View.OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								String content = getZyblContent(list);
-								copy(content, context);
-								Toast.makeText(context, "复制成功...", Toast.LENGTH_SHORT).show();
-							}
-						});
-					}
-				});
+					((Activity) context).runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							ZyblAdapter zyblAdapter = new ZyblAdapter(context, itemMatch);
+							holder.lvZybl.setAdapter(zyblAdapter);
+
+							holder.copyBtn.setOnClickListener(new View.OnClickListener() {
+								@Override
+								public void onClick(View v) {
+									String content = getZyblContent(list);
+									copy(content, context);
+									Toast.makeText(context, "复制成功...", Toast.LENGTH_SHORT).show();
+								}
+							});
+						}
+					});
+
+
 			}
 		}).start();
 	}
@@ -257,7 +264,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 			@Override
 			public void onResponse(Call call, Response response) throws IOException {
 			    String jsonData = response.body().string();
-				Log.i("zybl",jsonData);
+				//Log.i("zybl",jsonData);
 				Odds[] odds = gson.fromJson(jsonData, Odds[].class);
 				if (odds != null) {
 					for (final Odds odd : odds) {

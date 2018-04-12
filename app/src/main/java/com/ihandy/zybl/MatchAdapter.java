@@ -298,7 +298,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 		String content = "";
 		if (itemContents != null && itemContents.size() > 0) {
 			for (int j=0 ; j < itemContents.size() ; j++) {
-				content += (j + 1) + "."+ itemContents.get(j).getContent();
+				content += (j + 1) + "."+ itemContents.get(j).getContent()+"\n";
 			}
 		}
 		return content ;

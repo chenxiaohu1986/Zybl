@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -49,7 +51,7 @@ public class MainActivity extends Activity {
 	private TextView tvTime;
 
 	private SwipeRefreshLayout swipeRefreshLayout;
-	private ListView listView ;
+	private RecyclerView recyclerView ;
 	private List<ItemMatch> list = new ArrayList<>();
 	private String baseUrl = "http://cms.8win.com";
 
@@ -83,7 +85,8 @@ public class MainActivity extends Activity {
 		tvTime = findViewById(R.id.tvTime);
 		tvTime.setText(TimeUtils.getNowString(DEFAULT_DATE_FORMAT));  //当前时间
 		swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-		listView = findViewById(R.id.listView);
+		recyclerView = findViewById(R.id.recyclerView);
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		loadData();
 		time.setOnClickListener(listener);
 		tvTime.setOnClickListener(listener);
@@ -143,34 +146,27 @@ public class MainActivity extends Activity {
 					Element item = matchItem.get(i);
 					ItemMatch itemMatch = new ItemMatch();
 					String num = "";
+					String home = "";
+					String away = "";
 					if ( "a".equals(item.tagName())) {    //a href
-						String home = item.child(0).child(1).text();
-						String away = item.child(0).child(3).text();
-						itemMatch.setHome(home);
-						itemMatch.setAway(away);
-
+						home = item.child(0).child(1).text();
+						away = item.child(0).child(3).text();
 						num = item.child(0).child(0).text();
-						String zyblUrl = baseUrl + item.attr("href");
-						itemMatch.setZyblUrl(zyblUrl);
-						String matchId = matchWeek + num;
-						itemMatch.setMatchId(matchId);
-						itemMatch.setOddUrl(baseOddUrl + matchId);
-
 					} else {
-						String home = item.child(1).text();
-						String away = item.child(3).text();
-						itemMatch.setHome(home);
-						itemMatch.setAway(away);
+						home = item.child(1).text();
+						away = item.child(3).text();
 						num = item.child(0).text();
-						String matchId = matchWeek + num;
-						itemMatch.setMatchId(matchId);
-						itemMatch.setOddUrl(baseOddUrl + matchId);
 					}
+					itemMatch.setHome(home);
+					itemMatch.setAway(away);
 					itemMatch.setNum(num);
+					String matchId = matchWeek + num;
+					itemMatch.setMatchId(matchId);
+					itemMatch.setOddUrl(baseOddUrl + matchId);
+					String zyblUrl = baseUrl + "/zybl/" + matchId;
+					itemMatch.setZyblUrl(zyblUrl);
 					list.add(itemMatch);
 				}
-
-
 			}catch (Exception e){
 				Log.e("zybl",e.getMessage());
 			}
@@ -199,9 +195,8 @@ public class MainActivity extends Activity {
 		if(list.isEmpty()) {
 			Toast.makeText(this,"暂无数据...",Toast.LENGTH_LONG).show();
 		} else {
-			//list.clear();
 			matchAdapter = new MatchAdapter(this,list);
-			listView.setAdapter(matchAdapter);
+			recyclerView.setAdapter(matchAdapter);
 		}
 		swipeRefreshLayout.setRefreshing(false);
 	}

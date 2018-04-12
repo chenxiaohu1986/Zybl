@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
@@ -150,13 +150,14 @@
 
 
 
-
-    <com.ihandy.zybl.ListViewForScrollView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/lv_zybl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:divider="@null">
+    </android.support.v7.widget.RecyclerView>
 
-    </com.ihandy.zybl.ListViewForScrollView>
 
 </LinearLayout>

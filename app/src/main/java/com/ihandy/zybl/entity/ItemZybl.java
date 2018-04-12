@@ -10,7 +10,7 @@ import java.util.List;
 public class ItemZybl {
 
 
-	private String zhuke; //主  客
+	private String zhuke; //主  客   ""   当没有章鱼爆料时为""
 	private String des; //伤病 交锋  状态 赛程
 
 	private String title;

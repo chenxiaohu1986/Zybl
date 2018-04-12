@@ -301,9 +301,6 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 				content += (j + 1) + "."+ itemContents.get(j).getContent();
 			}
 		}
-		if (content.length() > 100){
-			content = content.substring(0,100)+ "...";
-		}
 		return content ;
 	}
 

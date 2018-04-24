@@ -2,22 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
+    android:padding="2dp"
     android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/llTeam"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_alignParentRight="true">
 
         <ImageView
-            android:layout_marginTop="10dp"
             android:id="@+id/teamIcon"
             android:layout_width="@dimen/zybl_iv_width"
             android:layout_height="@dimen/zybl_iv_height"
+            android:scaleType="fitCenter"
             />
-
 
     </LinearLayout>
 
@@ -34,21 +34,22 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="14dp"
             android:id="@+id/title"/>
 
         <TextView
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="2dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
+            android:textSize="12dp"
             android:id="@+id/content"/>
 
         <TextView
-            android:layout_marginTop="3dp"
+            android:visibility="visible"
+            android:layout_marginTop="2dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10dp"
+            android:textSize="8dp"
             android:id="@+id/des"/>
 
 

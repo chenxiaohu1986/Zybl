@@ -11,16 +11,19 @@
         android:background="@color/colorLightGray">
 
         <TextView
-            android:padding="5dp"
+            android:padding="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_head"/>
+            android:id="@+id/tv_head"
+            android:textSize="10dp"/>
 
 
     </LinearLayout>
 
 
     <RelativeLayout
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -41,7 +44,18 @@
             android:layout_width="@dimen/zybl_width"
             android:layout_height="@dimen/zybl_height"
             android:gravity="center"
+            android:textSize="14dp"
+            android:background="@drawable/corners_bg"
             />
+
+        <ImageView
+            android:id="@+id/copy"
+            android:layout_width="@dimen/zybl_height"
+            android:layout_height="@dimen/zybl_height"
+            android:src="@drawable/clipboard_copy"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/home"/>
+
 
         <TextView
             android:id="@+id/away"
@@ -49,6 +63,8 @@
             android:layout_width="@dimen/zybl_width"
             android:layout_height="@dimen/zybl_height"
             android:gravity="center"
+            android:textSize="14dp"
+            android:background="@drawable/corners_bg"
            />
 
 
@@ -57,7 +73,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
 
         <TextView
@@ -81,7 +98,7 @@
             />
 
         <ImageView
-            android:id="@+id/copy"
+            android:id="@+id/copyx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/clipboard_copy"
@@ -102,7 +119,8 @@
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
 
         <TextView

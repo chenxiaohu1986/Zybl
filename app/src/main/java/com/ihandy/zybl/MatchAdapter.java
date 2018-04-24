@@ -86,7 +86,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 		holder.home.setText(itemMatch.getHome());
 		holder.away.setText(itemMatch.getAway());
 
-		setOdd(itemMatch.getOddUrl(),holder);
+//		setOdd(itemMatch.getOddUrl(),holder);
 
 		setZybl(itemMatch,holder);
 

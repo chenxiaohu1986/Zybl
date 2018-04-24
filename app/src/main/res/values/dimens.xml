@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="zybl_iv_width">48dip</dimen>
-    <dimen name="zybl_iv_height">48dip</dimen>
+    <dimen name="zybl_iv_width">30dip</dimen>
+    <dimen name="zybl_iv_height">30dip</dimen>
 
     <dimen name="zybl_width">70dip</dimen>
-    <dimen name="zybl_height">38dip</dimen>
+    <dimen name="zybl_height">30dip</dimen>
 
 </resources>

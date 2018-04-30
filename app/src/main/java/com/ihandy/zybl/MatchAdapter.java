@@ -85,8 +85,11 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 		}
 		holder.home.setText(itemMatch.getHome());
 		holder.away.setText(itemMatch.getAway());
+		//holder.tv_middle.setText(itemMatch.getCtime());
 
-//		setOdd(itemMatch.getOddUrl(),holder);
+		setOdd(itemMatch.getOddUrl(),holder);
+
+
 
 		setZybl(itemMatch,holder);
 
@@ -102,6 +105,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 
 		public TextView tvHead;
 
+		public TextView tv_middle;
 		public TextView home;
 		public TextView away;
 		public ImageView copyBtn;
@@ -118,6 +122,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 			super(view);
 			tvHead = (TextView) view.findViewById(R.id.tv_head);
 
+			tv_middle = (TextView) view.findViewById(R.id.tv_middle);
 			home = (TextView) view.findViewById(R.id.home);
 			away = (TextView) view.findViewById(R.id.away);
 			copyBtn = (ImageView) view.findViewById(R.id.copy);
@@ -158,15 +163,19 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 				}
 
 				String keywords = doc.select("meta[name=keywords]").first().attr("content");
-				String ctime = doc.getElementById("ctime").text();
+
+				final String matchNum = doc.getElementById("matchNum").text();
+//				Log.e("zybl", "matchNum" +matchNum);
+				final String ctime = doc.getElementById("ctime").text();
 				String homeIcon = doc.getElementById("homeIcon").attr("src");
 				String awayIcon = doc.getElementById("awayIcon").attr("src");
+
+
 
 				Element zyblContent = doc.getElementById("zyblContent");   //章鱼爆料内容
 				final List list = new ArrayList();
 				Elements zyblElements = zyblContent.children();
 
-				//Log.i("zybl",zyblUrl+"------"+zyblElements.size());
 				if (zyblElements.size() ==1){
 					ItemZybl itemZybl = new ItemZybl();
 					itemZybl.setZhuke("");
@@ -188,10 +197,11 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MyViewHolder
 				}
 				itemMatch.setKeywords(keywords);
 				itemMatch.setCtime(ctime);
+
+
 				itemMatch.setHomeIcon(homeIcon);
 				itemMatch.setAwayIcon(awayIcon);
 				itemMatch.setList(list);
-
 
 					((Activity) context).runOnUiThread(new Runnable() {
 						@Override

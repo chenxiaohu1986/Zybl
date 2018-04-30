@@ -12,7 +12,7 @@
    <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:padding="10dp"
+       android:padding="2dp"
        android:gravity="center_vertical">
 
 
@@ -20,6 +20,7 @@
           android:id="@+id/time"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
           android:src="@drawable/time"
           />
 
@@ -32,11 +33,22 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content" />
 
+      <EditText
+          android:id="@+id/searchNum"
+          android:layout_toLeftOf="@+id/search"
+          android:layout_width="48dp"
+          android:layout_height="48dp"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="20dp">
+      </EditText>
+
+
       <TextView
+          android:id="@+id/search"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
-          android:text="章鱼爆料"
+          android:text="搜索"
           android:layout_alignParentRight="true"/>
    </RelativeLayout>
 

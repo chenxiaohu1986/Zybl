@@ -48,11 +48,12 @@
             />
 
         <ImageView
-            android:id="@+id/copy"
+            android:id="@+id/copyx"
             android:layout_width="@dimen/zybl_height"
             android:layout_height="@dimen/zybl_height"
             android:src="@drawable/clipboard_copy"
             android:layout_marginRight="15dp"
+            android:visibility="gone"
             android:layout_toLeftOf="@id/home"/>
 
 
@@ -73,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
         <TextView
@@ -97,12 +98,13 @@
             />
 
         <ImageView
-            android:id="@+id/copyx"
+            android:id="@+id/copy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/clipboard_copy"
             android:layout_marginRight="15dp"
-            android:layout_toLeftOf="@id/homeOdds"/>
+            android:layout_toLeftOf="@id/homeOdds"
+            android:visibility="visible"/>
 
         <TextView
             android:id="@+id/awayOdds"

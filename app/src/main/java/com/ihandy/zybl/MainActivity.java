@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -36,7 +37,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.aigestudio.datepicker.cons.DPMode;
 import cn.aigestudio.datepicker.views.DatePicker;
@@ -68,8 +71,14 @@ public class MainActivity extends Activity {
 	private int day;
 
 
+	private TextView searchNum;
+	private TextView search;
+
+
 	private MatchAdapter matchAdapter;
 
+
+	private static Map<String,ItemMatch> map  = new HashMap<>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +89,17 @@ public class MainActivity extends Activity {
 		year =  now.get(Calendar.YEAR);
 		month = now.get(Calendar.MONTH) + 1;
 		day = now.get(Calendar.DAY_OF_MONTH);
-
 		time =  findViewById(R.id.time);
 		tvTime = findViewById(R.id.tvTime);
 		tvTime.setText(TimeUtils.getNowString(DEFAULT_DATE_FORMAT));  //当前时间
+		searchNum = findViewById(R.id.searchNum);
+		search = findViewById(R.id.search);
+
 		swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 		recyclerView = findViewById(R.id.recyclerView);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
 		loadData();
 		time.setOnClickListener(listener);
 		tvTime.setOnClickListener(listener);
@@ -96,6 +109,38 @@ public class MainActivity extends Activity {
 				loadData();
 			}
 		});
+
+		search.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (TextUtils.isEmpty(searchNum.getText())){
+					loadData();
+				} else {
+					String num = searchNum.getText().toString();
+					loadItemData(num);
+				}
+			}
+		});
+
+
+	}
+
+	private void loadItemData(String num) {
+		ItemMatch itemMatch = map.get(num);
+		itemMatch.setNum(num);
+
+		String matchWeek = getMatchWeek();
+		String matchId = matchWeek + num;
+		itemMatch.setMatchId(matchId);
+		itemMatch.setOddUrl(baseOddUrl + matchId);
+		String zyblUrl = baseUrl + "/zybl/" + matchId;
+		itemMatch.setZyblUrl(zyblUrl);
+
+		list.clear();
+		list.add(itemMatch);
+		// 执行完毕后给handler发送一个空消息
+		handler.sendEmptyMessage(0);
+
 	}
 
 	// 对话框下的DatePicker
@@ -166,6 +211,7 @@ public class MainActivity extends Activity {
 					String zyblUrl = baseUrl + "/zybl/" + matchId;
 					itemMatch.setZyblUrl(zyblUrl);
 					list.add(itemMatch);
+					map.put(num,itemMatch);
 				}
 			}catch (Exception e){
 				Log.e("zybl",e.getMessage());
@@ -205,6 +251,7 @@ public class MainActivity extends Activity {
 	private void loadData(){
 		if (NetworkUtils.isConnected()){
 			list.clear();
+			map.clear();
 			// 显示“正在加载”窗口
 			swipeRefreshLayout.setRefreshing(true);
 			if (matchAdapter != null){
